@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  nginx:
+    image: jwilder/nginx-proxy:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./vhost.d:/etc/nginx/vhost.d:ro
+      - ./certs:/etc/nginx/certs
+  ui:
+    image: recipe_ui
+    ports:
+      - "3003:3003"
+    environment:
+      - VIRTUAL_HOST=recepies.local
+      - VIRTUAL_PORT=3003
+    volumes:
+      - ./files:/files/images:ro
+  api:
+    image: recepies
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_HOST=172.17.0.1
+      - DATABASE=recepies
+      - FILEBASE=/files
+    volumes:
+      - ./files:/files
+  mongo:
+    image: mvertes/alpine-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db:/data/db
