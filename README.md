@@ -1,4 +1,4 @@
-# recepies_proxy
+# Recepies Proxy
 A simple docker-compose file to tie all the recipe services together
 
 ## Prerequisites
@@ -19,11 +19,12 @@ $ docker pull mvertes/alpine-mongo
 ### Build backend image
 ```
 $ cd ~/go/src/github.com/eriklindqvist/
-$ git clone https://github.com/eriklindqvist/recepies.git
+$ git clone https://github.com/eriklindqvist/recepies_api.git
 $ go get
 $ ./build.sh
 $ cd ..
 ```
+
 ### Build varsego static file server
 ```
 $ git clone https://github.com/eriklindqvist/varsego.git
@@ -35,12 +36,13 @@ $ ./build.sh
 ### Build frontend image
 ```
 $ cd <WORKSPACE>
-$ git clone https://github.com/eriklindqvist/recipe_ui.git
+$ git clone https://github.com/eriklindqvist/recepies_ui.git
 $ cd recipe_ui
 $ npm install
 $ ./build.sh
 $ cd ..
 ```
+
 ### Fire it up
 ```
 $ git clone https://github.com/eriklindqvist/recepies_proxy.git
