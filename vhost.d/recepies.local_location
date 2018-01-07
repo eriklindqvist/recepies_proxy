@@ -1,0 +1,3 @@
+proxy_cache ui_cache;
+proxy_cache_use_stale error timeout http_500 http_502 http_503 http_504;
+add_header X-Cached $upstream_cache_status;
