@@ -10,6 +10,10 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./vhost.d:/etc/nginx/vhost.d:ro
       - ./certs:/etc/nginx/certs
+      - ./my_proxy.conf:/etc/nginx/conf.d/my_proxy.conf:ro
+    depends_on:
+      - "ui"
+      - "api"
   ui:
     image: recipe_ui
     ports:
@@ -19,6 +23,8 @@ services:
       - VIRTUAL_PORT=3003
     volumes:
       - ./files:/files/images:ro
+    depends_on:
+      - "api"
   api:
     image: recepies
     ports:
@@ -29,6 +35,8 @@ services:
       - FILEBASE=/files
     volumes:
       - ./files:/files
+    depends_on:
+      - "mongo"
   mongo:
     image: mvertes/alpine-mongo
     ports:
