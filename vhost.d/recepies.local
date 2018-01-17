@@ -20,3 +20,26 @@ location /api/ {
 
   proxy_pass http://172.17.0.1:3000/ ;
 }
+
+location /auth/ {
+  # To allow UI webpack-dev-server in development mode to access
+  # the API, uncomment the following:
+
+  ## BEGIN ##
+
+  if ($request_method ~* "(GET|POST|PUT|DELETE)") {
+    add_header "Access-Control-Allow-Origin"  *;
+  }
+
+  if ($request_method = OPTIONS ) {
+    add_header "Access-Control-Allow-Origin"  *;
+    add_header "Access-Control-Allow-Methods" "GET, POST, PUT, DELETE, OPTIONS, HEAD";
+    add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept";
+
+    return 200;
+  }
+
+  ## END ##
+
+  proxy_pass http://172.17.0.1:3002/ ;
+}
