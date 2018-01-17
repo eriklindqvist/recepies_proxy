@@ -32,10 +32,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGODB_HOST=172.17.0.1
+      - MONGODB_HOST=mongo
       - DATABASE=recepies
       - FILEBASE=/files
       - SECRET=eEMAr0UrJmyrLvwA2jcd8tPC93NTmE5cWpx9abAkc5quNysKZLwlxPHvOgNO
+      - PROTECTED_ENDPOINTS="recipe:create,recipe:update,recipe:delete,recipe:upload"
     volumes:
       - ./files:/files
     depends_on:
@@ -45,7 +46,7 @@ services:
     ports:
       - "3002:3002"
     environment:
-      - MONGODB_HOST=172.17.0.1
+      - MONGODB_HOST=mongo
       - DATABASE=recepies
       - SECRET=eEMAr0UrJmyrLvwA2jcd8tPC93NTmE5cWpx9abAkc5quNysKZLwlxPHvOgNO
     depends_on:
@@ -56,3 +57,4 @@ services:
       - "27017:27017"
     volumes:
       - ./db:/data/db
+    command: mongod --bind_ip_all
