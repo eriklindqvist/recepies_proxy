@@ -41,6 +41,10 @@ services:
       - ./files:/files
     depends_on:
       - "mongo"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:5000"
   auth:
     image: auth
     ports:
@@ -58,3 +62,10 @@ services:
     volumes:
       - ./db:/data/db
     command: mongod --bind_ip_all
+  logstash:
+    image: docker.elastic.co/logstash/logstash-oss:6.1.2
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline/:ro
+      #- ./logstash/settings:/usr/share/logstash/config:ro
