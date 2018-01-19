@@ -18,10 +18,10 @@ location /api/ {
 
   ## END ##
 
-  proxy_pass http://172.17.0.1:3000/ ;
+  proxy_pass http://api:3000/ ;
 }
 
-location /auth/ {
+location /auth {
   # To allow UI webpack-dev-server in development mode to access
   # the API, uncomment the following:
 
@@ -41,5 +41,5 @@ location /auth/ {
 
   ## END ##
 
-  proxy_pass http://172.17.0.1:3002/ ;
+  proxy_pass http://auth:3002/ ;
 }

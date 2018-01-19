@@ -4,7 +4,7 @@ services:
   nginx:
     image: jwilder/nginx-proxy:alpine
     ports:
-      - "80:80"
+    #  - "80:80"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
@@ -41,10 +41,12 @@ services:
       - ./files:/files
     depends_on:
       - "mongo"
+      - "logstash"
     logging:
       driver: syslog
       options:
         syslog-address: "tcp://localhost:5000"
+        tag: "recepies-api"
   auth:
     image: auth
     ports:
@@ -53,8 +55,14 @@ services:
       - MONGODB_HOST=mongo
       - DATABASE=recepies
       - SECRET=eEMAr0UrJmyrLvwA2jcd8tPC93NTmE5cWpx9abAkc5quNysKZLwlxPHvOgNO
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:5000"
+        tag: "auth-api"
     depends_on:
       - "mongo"
+      - "logstash"
   mongo:
     image: mvertes/alpine-mongo
     ports:
@@ -67,5 +75,25 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline/:ro
-      #- ./logstash/settings:/usr/share/logstash/config:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    depends_on:
+      - "elasticsearch"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - "discovery.type=single-node"
+    volumes:
+      #- ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:6.1.2
+    ports:
+      - "5601:5601"
+    #volumes:
+    #  - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    environment:
+      - VIRTUAL_HOST=kibana.recepies.local
+      - VIRTUAL_PORT=5601
