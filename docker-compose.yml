@@ -35,10 +35,11 @@ services:
       - MONGODB_HOST=mongo
       - DATABASE=recepies
       - FILEBASE=/files
-      - SECRET=eEMAr0UrJmyrLvwA2jcd8tPC93NTmE5cWpx9abAkc5quNysKZLwlxPHvOgNO
+      - KEYFILE=/public.rsa
       - PROTECTED_ENDPOINTS="recipe:create,recipe:update,recipe:delete,recipe:upload"
     volumes:
       - ./files:/files
+      - ./certs/public.rsa:/public.rsa:ro
     depends_on:
       - "mongo"
       - "logstash"
@@ -51,10 +52,12 @@ services:
     image: auth
     ports:
       - "3002:3002"
+    volumes:
+      - ./certs/private.rsa:/private.rsa:ro
     environment:
-      - MONGODB_HOST=mongo
+      - MONGODB_HOST=172.17.0.1
       - DATABASE=recepies
-      - SECRET=eEMAr0UrJmyrLvwA2jcd8tPC93NTmE5cWpx9abAkc5quNysKZLwlxPHvOgNO
+      - KEYFILE=/private.rsa
     logging:
       driver: syslog
       options:
