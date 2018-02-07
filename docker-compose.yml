@@ -16,7 +16,7 @@ services:
       - "api"
       - "auth"
   ui:
-    image: recipe_ui
+    image: recepies_ui:latest
     ports:
       - "3003:3003"
     environment:
@@ -28,7 +28,7 @@ services:
       - "api"
       - "auth"
   api:
-    image: recepies
+    image: recepies_api:latest
     ports:
       - "3000:3000"
     environment:
@@ -49,7 +49,7 @@ services:
         syslog-address: "tcp://localhost:5000"
         tag: "recepies-api"
   auth:
-    image: auth
+    image: recepies_auth:latest
     ports:
       - "3002:3002"
     volumes:
