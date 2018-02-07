@@ -25,6 +25,21 @@ $ ./build.sh
 $ cd ..
 ```
 
+### Build auth service
+```
+$ cd ~/go/src/github.com/eriklindqvist/
+$ git clone https://github.com/eriklindqvist/recepies_auth.git
+$ go get -d ./...
+$ ./build.sh
+$ cd ..
+```
+
+#### Generate keys
+```
+$ openssl genrsa -out certs/private.rsa 2048
+$ openssl rsa -in certs/private.rsa -pubout > certs/public.rsa
+```
+
 ### Build varsego static file server
 ```
 $ git clone https://github.com/eriklindqvist/varsego.git
